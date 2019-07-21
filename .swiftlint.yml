@@ -1,0 +1,13 @@
+disabled_rules:
+  - line_length
+  - nesting
+  - identifier_name
+  - xctfail_message
+included:
+  - Sources/
+  - Tests/
+  - Package.swift
+excluded:
+  - .build/
+  - Tests/*/XCTestManifests.swift
+  - Tests/LinuxMain.swift
