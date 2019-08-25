@@ -11,9 +11,9 @@ public extension Array {
     }
 
     mutating func popFirst() -> Element? {
-        if !isEmpty {
-            return removeFirst()
+        guard !isEmpty else {
+            return nil
         }
-        return nil
+        return removeFirst()
     }
 }
