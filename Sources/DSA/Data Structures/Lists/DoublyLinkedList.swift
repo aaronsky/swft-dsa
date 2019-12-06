@@ -211,5 +211,8 @@ extension DoublyLinkedList: Sequence {
 extension DoublyLinkedList: ExpressibleByArrayLiteral {
     convenience init(arrayLiteral elements: Element...) {
         self.init()
+        for element in elements {
+            append(element)
+        }
     }
 }

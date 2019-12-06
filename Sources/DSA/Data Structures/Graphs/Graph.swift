@@ -32,7 +32,7 @@ public enum EdgeType {
 
 public protocol Graph {
     associatedtype Element
-
+    
     func createVertex(data: Element) -> Vertex<Element>
     func addDirectedEdge(from source: Vertex<Element>, to destination: Vertex<Element>, weight: Double?)
     func addUndirectedEdge(from source: Vertex<Element>, to destination: Vertex<Element>, weight: Double?)
@@ -46,7 +46,7 @@ public extension Graph {
         addDirectedEdge(from: source, to: destination, weight: weight)
         addDirectedEdge(from: destination, to: source, weight: weight)
     }
-
+    
     func add(_ edge: EdgeType, from source: Vertex<Element>, to destination: Vertex<Element>, weight: Double?) {
         switch edge {
         case .directed:
@@ -61,12 +61,11 @@ public extension Graph where Element: Hashable {
     /// O(V + E)
     func breadthFirstSearch(from source: Vertex<Element>) -> [Vertex<Element>] {
         var queue = QueueStack<Vertex<Element>>()
-        var enqueued: Set<Vertex<Element>> = []
+        var enqueued: Set<Vertex<Element>> = [source]
         var visited: [Vertex<Element>] = []
-
+        
         queue.enqueue(source)
-        enqueued.insert(source)
-
+        
         while let vertex = queue.dequeue() {
             visited.append(vertex)
             let neighborEdges = edges(from: vertex)
@@ -75,38 +74,33 @@ public extension Graph where Element: Hashable {
                 enqueued.insert(edge.destination)
             }
         }
-
+        
         return visited
     }
-
+    
     /// O(V + E)
     func depthFirstSearch(from source: Vertex<Element>) -> [Vertex<Element>] {
         var stack: [Vertex<Element>] = [source]
-        var pushed: Set<Vertex<Element>> = [source]
-        var visited: [Vertex<Element>] = [source]
-
-        while let vertex = stack.last {
-            let neighbors = edges(from: vertex)
+        var visited: Set<Vertex<Element>> = [source]
+        
+        outer: while let vertex = stack.last {
+            let neighbors = self.edges(from: vertex)
             guard !neighbors.isEmpty else {
                 stack.removeLast()
                 continue
             }
-
-            var foundVertex = false
+            
             for edge in neighbors {
-                if !pushed.contains(edge.destination) {
+                if !visited.contains(edge.destination) {
+                    visited.insert(edge.destination)
                     stack.append(edge.destination)
-                    pushed.insert(edge.destination)
-                    visited.append(edge.destination)
-                    foundVertex = true
-                    break
+                    continue outer
                 }
             }
-            if foundVertex {
-                stack.removeLast()
-            }
+            
+            stack.removeLast()
         }
-
-        return visited
+        
+        return stack
     }
 }

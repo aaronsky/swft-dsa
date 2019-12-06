@@ -39,7 +39,7 @@ final class SinglyLinkedList<Element> {
             return false
         }
         var tortoise = head
-        var hare = head
+        var hare = head?.next
         while hare != nil && tortoise != nil {
             if hare === tortoise {
                 return true
@@ -239,5 +239,8 @@ extension SinglyLinkedList: Sequence {
 extension SinglyLinkedList: ExpressibleByArrayLiteral {
     convenience init(arrayLiteral elements: Element...) {
         self.init()
+        for element in elements {
+            append(element)
+        }
     }
 }
