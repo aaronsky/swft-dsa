@@ -32,7 +32,7 @@ public enum EdgeType {
 
 public protocol Graph {
     associatedtype Element
-    
+
     func createVertex(data: Element) -> Vertex<Element>
     func addDirectedEdge(from source: Vertex<Element>, to destination: Vertex<Element>, weight: Double?)
     func addUndirectedEdge(from source: Vertex<Element>, to destination: Vertex<Element>, weight: Double?)
@@ -46,7 +46,7 @@ public extension Graph {
         addDirectedEdge(from: source, to: destination, weight: weight)
         addDirectedEdge(from: destination, to: source, weight: weight)
     }
-    
+
     func add(_ edge: EdgeType, from source: Vertex<Element>, to destination: Vertex<Element>, weight: Double?) {
         switch edge {
         case .directed:
@@ -63,20 +63,20 @@ public extension Graph where Element: Hashable {
         var queue: QueueStack<Vertex<Element>> = [source]
         var enqueued: Set<Vertex<Element>> = [source]
         var visited: [Vertex<Element>] = []
-        
+
         while let vertex = queue.dequeue() {
             visited.append(vertex)
-            
+
             let neighborEdges = edges(from: vertex)
             for edge in neighborEdges where !enqueued.contains(edge.destination) {
                 queue.enqueue(edge.destination)
                 enqueued.insert(edge.destination)
             }
         }
-        
+
         return visited
     }
-    
+
     /// O(V + E)
     func depthFirstSearch(from source: Vertex<Element>) -> [Vertex<Element>] {
         var stack: [Vertex<Element>] = [source]
@@ -87,7 +87,7 @@ public extension Graph where Element: Hashable {
             if pushed.contains(vertex) {
                 continue
             }
-            
+
             pushed.insert(vertex)
             visited.append(vertex)
 
@@ -95,7 +95,7 @@ public extension Graph where Element: Hashable {
                 stack.append(neighbor.destination)
             }
         }
-        
+
         return visited
     }
 }

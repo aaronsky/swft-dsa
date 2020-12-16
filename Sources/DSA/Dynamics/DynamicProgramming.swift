@@ -9,32 +9,32 @@ public enum Fibonacci {
         guard num >= 2 else {
             return num
         }
-        
+
         var n1 = 1
         var n2 = 0
-        
+
         for _ in 2..<num {
             let n0 = n1 + n2
             n2 = n1
             n1 = n0
         }
-        
+
         return n1 + n2
     }
 }
 
 public struct Coins {
     let coins: [Int]
-    
+
     init(delineations coins: [Int]) {
         self.coins = coins
     }
-    
+
     func numberOfCoins(for change: Int) -> Int {
         var cache = [Int](repeating: 0, count: change + 1)
         for i in 1...change {
             var minCoins = Int.max
-            
+
             for coin in coins where i - coin >= 0 {
                 let currCoins = cache[i - coin] + 1
                 if currCoins < minCoins {
@@ -49,11 +49,11 @@ public struct Coins {
 
 public struct SquareSubMatrix {
     let matrix: [[Bool]]
-    
+
     init(matrix: [[Bool]]) {
         self.matrix = matrix
     }
-    
+
     func findLargest() -> Int {
         var cache = [[Int]](repeating: [Int](repeating: 0, count: matrix[0].count), count: matrix.count)
         var maxSize = 0
@@ -82,19 +82,19 @@ public struct Knapsack {
         let weight: Int
         let value: Int
     }
-    
+
     let capacity: Int
-    
+
     init(capacity: Int) {
         self.capacity = capacity
     }
-    
+
     func maximumPossibleValue(from items: [Item]) -> Int {
         var itemCache = [Int](repeating: 0, count: capacity + 1)
-        
+
         for item in items {
             var newItemCache = [Int](repeating: 0, count: capacity + 1)
-            
+
             for j in 0...capacity {
                 if item.weight > j {
                     newItemCache[j] = itemCache[j]
@@ -102,10 +102,10 @@ public struct Knapsack {
                     newItemCache[j] = max(itemCache[j], itemCache[j - item.weight] + item.value)
                 }
             }
-            
+
             itemCache = newItemCache
         }
-        
+
         return itemCache[capacity]
     }
 }
@@ -115,13 +115,13 @@ public enum TargetSum {
         let sum = numbers.reduce(0, +)
         let sumDimension = 2 * sum + 1
         var cache = [[Int]](repeating: [Int](repeating: 0, count: sumDimension), count: numbers.count + 1)
-        
+
         guard sum != 0 else {
             return 0
         }
 
         cache[0][sum] = 1
-        
+
         for i in 1...numbers.count {
             for j in 0..<sumDimension {
                 let prev = cache[i - 1][j]
@@ -131,7 +131,7 @@ public enum TargetSum {
                 }
             }
         }
-        
+
         return cache[numbers.count][sum + target]
     }
 }

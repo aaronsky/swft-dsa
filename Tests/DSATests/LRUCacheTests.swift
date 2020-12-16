@@ -9,7 +9,7 @@ import XCTest
 @testable import DSA
 
 final class LRUCacheTests: XCTestCase {
-    
+
     func testCacheRespectsCapacity() {
         let cache = LRUCache<String, Int>(capacity: 5)
         XCTAssertEqual(cache.count, 0)

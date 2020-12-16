@@ -12,13 +12,13 @@ final class DynamicProgrammingTests: XCTestCase {
         XCTAssertEqual(coins.numberOfCoins(for: 6), 2)
         XCTAssertEqual(coins.numberOfCoins(for: 49), 7)
     }
-    
+
     func testSquareMatrices() {
         let matrix1 = SquareSubMatrix(matrix:
             [
                 [false, true, false, false],
                 [true, true, true, true],
-                [false, true, true, false],
+                [false, true, true, false]
             ]
         )
         XCTAssertEqual(matrix1.findLargest(), 2)
@@ -28,7 +28,7 @@ final class DynamicProgrammingTests: XCTestCase {
                 [true, true, true, true, false],
                 [true, true, true, true, false],
                 [true, true, true, true, false],
-                [true, false, false, false, false],
+                [true, false, false, false, false]
             ]
         )
         XCTAssertEqual(matrix2.findLargest(), 4)
@@ -38,12 +38,12 @@ final class DynamicProgrammingTests: XCTestCase {
                 [true, true, true, true, false],
                 [true, true, true, true, false],
                 [false, true, true, true, false],
-                [true, false, false, false, false],
+                [true, false, false, false, false]
             ]
         )
         XCTAssertEqual(matrix3.findLargest(), 3)
     }
-    
+
     func testKnapsack() {
         let knapsack = Knapsack(capacity: 5)
         XCTAssertEqual(knapsack.maximumPossibleValue(from: [
@@ -52,11 +52,10 @@ final class DynamicProgrammingTests: XCTestCase {
             .init(weight: 3, value: 12)
         ]), 22)
     }
-    
+
     func testTargetSum() {
         XCTAssertEqual(
             TargetSum.numberOfPossibleSums(targeting: 3, in: [1, 1, 1, 1, 1]),
             5)
     }
 }
-
