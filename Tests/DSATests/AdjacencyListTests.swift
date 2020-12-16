@@ -23,7 +23,7 @@ class AdjacencyListTests: XCTestCase {
         graph.addUndirectedEdge(from: four, to: five, weight: nil)
         graph.add(.undirected, from: two, to: five, weight: nil)
         XCTAssertEqual(graph.breadthFirstSearch(from: one), [one, two, three, five, four])
-        XCTAssertEqual(graph.depthFirstSearch(from: one), [one, two, three, five, four])
+        XCTAssertEqual(graph.depthFirstSearch(from: one), [one, three, four, five, two])
     }
     
     
@@ -40,7 +40,7 @@ class AdjacencyListTests: XCTestCase {
         graph.addDirectedEdge(from: four, to: five, weight: nil)
         graph.add(.directed, from: two, to: five, weight: nil)
         XCTAssertEqual(graph.breadthFirstSearch(from: one), [one, two, three, five, four])
-        XCTAssertEqual(graph.depthFirstSearch(from: one), [one, two, three, five, four])
+        XCTAssertEqual(graph.depthFirstSearch(from: one), [one, three, four, five, two])
     }
     
     func testGraphWithWeight() {

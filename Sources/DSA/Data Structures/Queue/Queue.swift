@@ -110,3 +110,12 @@ public struct QueueStack<Element>: Queue {
         return leftStack.popLast()
     }
 }
+
+extension QueueStack: ExpressibleByArrayLiteral {
+    public init(arrayLiteral: Element...) {
+        self = .init()
+        for el in arrayLiteral {
+            self.enqueue(el)
+        }
+    }
+}

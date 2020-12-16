@@ -60,14 +60,13 @@ public extension Graph {
 public extension Graph where Element: Hashable {
     /// O(V + E)
     func breadthFirstSearch(from source: Vertex<Element>) -> [Vertex<Element>] {
-        var queue = QueueStack<Vertex<Element>>()
+        var queue: QueueStack<Vertex<Element>> = [source]
         var enqueued: Set<Vertex<Element>> = [source]
         var visited: [Vertex<Element>] = []
         
-        queue.enqueue(source)
-        
         while let vertex = queue.dequeue() {
             visited.append(vertex)
+            
             let neighborEdges = edges(from: vertex)
             for edge in neighborEdges where !enqueued.contains(edge.destination) {
                 queue.enqueue(edge.destination)
@@ -81,26 +80,22 @@ public extension Graph where Element: Hashable {
     /// O(V + E)
     func depthFirstSearch(from source: Vertex<Element>) -> [Vertex<Element>] {
         var stack: [Vertex<Element>] = [source]
-        var visited: Set<Vertex<Element>> = [source]
-        
-        outer: while let vertex = stack.last {
-            let neighbors = self.edges(from: vertex)
-            guard !neighbors.isEmpty else {
-                stack.removeLast()
+        var pushed: Set<Vertex<Element>> = []
+        var visited: [Vertex<Element>] = []
+
+        while let vertex = stack.popLast() {
+            if pushed.contains(vertex) {
                 continue
             }
             
-            for edge in neighbors {
-                if !visited.contains(edge.destination) {
-                    visited.insert(edge.destination)
-                    stack.append(edge.destination)
-                    continue outer
-                }
+            pushed.insert(vertex)
+            visited.append(vertex)
+
+            for neighbor in self.edges(from: vertex) {
+                stack.append(neighbor.destination)
             }
-            
-            stack.removeLast()
         }
         
-        return stack
+        return visited
     }
 }

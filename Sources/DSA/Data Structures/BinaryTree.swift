@@ -1,6 +1,6 @@
 import Foundation
 
-class BinaryTree<T: Equatable & Comparable & Hashable> {
+class BinaryTree<T: Equatable & Comparable> {
     var value: T
     var left: BinaryTree<T>?
     var right: BinaryTree<T>?
