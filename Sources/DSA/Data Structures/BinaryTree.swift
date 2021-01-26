@@ -1,27 +1,27 @@
 import Foundation
 
-class BinaryTree<T: Equatable & Comparable> {
-    var value: T
-    var left: BinaryTree<T>?
-    var right: BinaryTree<T>?
+class BinaryTree<Element: Equatable & Comparable> {
+    var value: Element
+    var left: BinaryTree<Element>?
+    var right: BinaryTree<Element>?
 
     var isLeaf: Bool {
         return left == nil && right == nil
     }
 
-    init(value: T, left: BinaryTree<T>? = nil, right: BinaryTree<T>? = nil) {
+    init(value: Element, left: BinaryTree<Element>? = nil, right: BinaryTree<Element>? = nil) {
         self.value = value
         self.left = left
         self.right = right
     }
 
     @discardableResult
-    func insert(_ element: T) -> BinaryTree<T> {
+    func insert(_ element: Element) -> BinaryTree<Element> {
         return self.insert(tree: BinaryTree(value: element))
     }
 
     @discardableResult
-    func insert(tree: BinaryTree<T>) -> BinaryTree<T> {
+    func insert(tree: BinaryTree<Element>) -> BinaryTree<Element> {
         if value > tree.value {
             if let left = left {
                 return left.insert(tree: tree)
@@ -38,7 +38,7 @@ class BinaryTree<T: Equatable & Comparable> {
         return tree
     }
 
-    func remove(_ element: T) -> BinaryTree<T>? {
+    func remove(_ element: Element) -> BinaryTree<Element>? {
         if element < value {
             left = left?.remove(element)
         } else if element > value {
@@ -57,7 +57,7 @@ class BinaryTree<T: Equatable & Comparable> {
         return self
     }
 
-    private static func minValue(_ root: BinaryTree<T>) -> T {
+    private static func minValue(_ root: BinaryTree<Element>) -> Element {
         var root = root
         var minv = root.value
         while let left = root.left {
@@ -67,19 +67,19 @@ class BinaryTree<T: Equatable & Comparable> {
         return minv
     }
 
-    func traverse(_ strategy: TraversalStrategy, _ handler: (T) throws -> Void) rethrows {
+    func traverse(_ strategy: TraversalStrategy, _ handler: (Element) throws -> Void) rethrows {
         try strategy.perform(tree: self, handler)
     }
 
-    func contains(strategy: SearchStrategy, where predicate: (T) throws -> Bool) rethrows -> Bool {
+    func contains(strategy: SearchStrategy, where predicate: (Element) throws -> Bool) rethrows -> Bool {
         return (try search(using: strategy, where: predicate)) != nil
     }
 
-    func search(using strategy: SearchStrategy, where predicate: (T) throws -> Bool) rethrows -> BinaryTree<T>? {
+    func search(using strategy: SearchStrategy, where predicate: (Element) throws -> Bool) rethrows -> BinaryTree<Element>? {
         return try strategy.perform(tree: self, where: predicate)
     }
 
-    func reversed() -> BinaryTree<T> {
+    func reversed() -> BinaryTree<Element> {
         let left = self.left?.reversed()
         let right = self.right?.reversed()
         return BinaryTree(value: value, left: right, right: left)
@@ -90,7 +90,7 @@ class BinaryTree<T: Equatable & Comparable> {
         case preorder
         case postorder
 
-        func perform(tree: BinaryTree<T>, _ handler: (T) throws -> Void) rethrows {
+        func perform(tree: BinaryTree<Element>, _ handler: (Element) throws -> Void) rethrows {
             switch self {
             case .inorder:
                 try inorderStrategy(tree: tree, handler)
@@ -101,7 +101,7 @@ class BinaryTree<T: Equatable & Comparable> {
             }
         }
 
-        private func inorderStrategy(tree: BinaryTree<T>, _ handler: (T) throws -> Void) rethrows {
+        private func inorderStrategy(tree: BinaryTree<Element>, _ handler: (Element) throws -> Void) rethrows {
             if let left = tree.left {
                 try inorderStrategy(tree: left, handler)
             }
@@ -111,7 +111,7 @@ class BinaryTree<T: Equatable & Comparable> {
             }
         }
 
-        private func preorderStrategy(tree: BinaryTree<T>, _ handler: (T) throws -> Void) rethrows {
+        private func preorderStrategy(tree: BinaryTree<Element>, _ handler: (Element) throws -> Void) rethrows {
             try handler(tree.value)
             if let left = tree.left {
                 try preorderStrategy(tree: left, handler)
@@ -121,7 +121,7 @@ class BinaryTree<T: Equatable & Comparable> {
             }
         }
 
-        private func postorderStrategy(tree: BinaryTree<T>, _ handler: (T) throws -> Void) rethrows {
+        private func postorderStrategy(tree: BinaryTree<Element>, _ handler: (Element) throws -> Void) rethrows {
             if let left = tree.left {
                 try postorderStrategy(tree: left, handler)
             }
@@ -136,7 +136,7 @@ class BinaryTree<T: Equatable & Comparable> {
         case breadthFirst
         case depthFirst
 
-        func perform(tree: BinaryTree<T>, where predicate: (T) throws -> Bool) rethrows -> BinaryTree<T>? {
+        func perform(tree: BinaryTree<Element>, where predicate: (Element) throws -> Bool) rethrows -> BinaryTree<Element>? {
             switch self {
             case .breadthFirst:
                 return try breadthFirstSearchStrategy(tree: tree, where: predicate)
@@ -145,8 +145,8 @@ class BinaryTree<T: Equatable & Comparable> {
             }
         }
 
-        private func breadthFirstSearchStrategy(tree: BinaryTree<T>, where predicate: (T) throws -> Bool) rethrows -> BinaryTree<T>? {
-            var queue: [BinaryTree<T>] = []
+        private func breadthFirstSearchStrategy(tree: BinaryTree<Element>, where predicate: (Element) throws -> Bool) rethrows -> BinaryTree<Element>? {
+            var queue: [BinaryTree<Element>] = []
             queue.append(tree)
             while !queue.isEmpty {
                 guard let node = queue.popFirst() else {
@@ -165,8 +165,8 @@ class BinaryTree<T: Equatable & Comparable> {
             return nil
         }
 
-        private func depthFirstSearchStrategy(tree: BinaryTree<T>, where predicate: (T) throws -> Bool) rethrows -> BinaryTree<T>? {
-            var stack: [BinaryTree<T>] = []
+        private func depthFirstSearchStrategy(tree: BinaryTree<Element>, where predicate: (Element) throws -> Bool) rethrows -> BinaryTree<Element>? {
+            var stack: [BinaryTree<Element>] = []
             stack.append(tree)
             while !stack.isEmpty {
                 guard let node = stack.popLast() else {

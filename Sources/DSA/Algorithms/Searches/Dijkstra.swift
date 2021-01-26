@@ -10,18 +10,11 @@ public enum Visit<Element: Hashable> {
     case edge(Edge<Element>)
 }
 
-public class Dijkstra<Element: Hashable> {
-    public typealias Graph = AdjacencyList<Element>
-    public typealias PathMap = [Vertex<Element>: Visit<Element>]
-
-    let graph: Graph
-
-    public init(graph: Graph) {
-        self.graph = graph
-    }
+public extension Graph where Element: Hashable {
+    typealias PathMap = [Vertex<Element>: Visit<Element>]
 
     /// O(E log V)
-    public func shortestPath(from start: Vertex<Element>) -> [Vertex<Element>: Visit<Element>] {
+    func shortestPath(from start: Vertex<Element>) -> PathMap {
         var paths: PathMap = [start: .start]
 
         var priorityQueue = PriorityQueue<Vertex<Element>>(sortedBy: {
@@ -29,7 +22,7 @@ public class Dijkstra<Element: Hashable> {
         }, contentsOf: [start])
 
         while let vertex = priorityQueue.dequeue() {
-            for edge in graph.edges(from: vertex) {
+            for edge in edges(from: vertex) {
                 guard let weight = edge.weight else {
                     continue
                 }
@@ -43,7 +36,7 @@ public class Dijkstra<Element: Hashable> {
         return paths
     }
 
-    public func shortestPath(to destination: Vertex<Element>, paths: PathMap) -> [Edge<Element>] {
+    func shortestPath(to destination: Vertex<Element>, paths: PathMap) -> [Edge<Element>] {
         return route(to: destination, with: paths)
     }
 
